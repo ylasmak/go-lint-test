@@ -30,7 +30,6 @@ func GetPrivateIpAddress() ([]string, error) {
 }
 
 func HttpsClient(cert string) *http.Client {
-
 	// Create a custom TLS configuration
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: false, // Ignore verification of the server's certificate
@@ -49,16 +48,12 @@ func HttpsClient(cert string) *http.Client {
 			TLSClientConfig: tlsConfig,
 		},
 	}
-
 	return client
-
 }
 
 func HttpClient() *http.Client {
-
 	// Create an HTTP client with the custom TLS configuration
 	client := &http.Client{}
-
 	return client
 
 }

@@ -83,9 +83,8 @@ func (s Server) startServer(router *gin.Engine) {
 
 func (s Server) getIdentity(c *gin.Context) {
 	ips, err := lib.GetPrivateIpAddress()
-	fmt.Println(c.Request.Header)
+	
 	if err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, err)
 	}
 	fmt.Print(s)
@@ -111,7 +110,7 @@ func (s Server) invokeAPI(c *gin.Context, checkSelfSignedCA bool) {
 
 	ips, err := lib.GetPrivateIpAddress()
 	if err != nil {
-		fmt.Println(err)
+		
 		c.JSON(http.StatusInternalServerError, err)
 	}
 
@@ -119,7 +118,7 @@ func (s Server) invokeAPI(c *gin.Context, checkSelfSignedCA bool) {
 	err = json.NewDecoder(c.Request.Body).Decode(&service)
 	fmt.Print(service)
 	if err != nil {
-		fmt.Println(err)
+		
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
@@ -131,7 +130,7 @@ func (s Server) invokeAPI(c *gin.Context, checkSelfSignedCA bool) {
 	}
 
 	if err != nil {
-		fmt.Println(err)
+		
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
@@ -140,7 +139,7 @@ func (s Server) invokeAPI(c *gin.Context, checkSelfSignedCA bool) {
 	err = json.NewDecoder(response.Body).Decode(&result)
 	fmt.Print(result)
 	if err != nil {
-		fmt.Println(err)
+	
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
