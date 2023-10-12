@@ -8,7 +8,6 @@ import (
 	"os"
 	"strings"
 	"fmt"
-
 	"github.com/gin-gonic/gin"
 	"github.com/proxy/lib"
 )
@@ -40,9 +39,7 @@ func main() {
 	} else {
 		s.startServer(router)
 	}
-
 }
-
 func (s Server) startTLSServer(router *gin.Engine) {
 	tlsCert, err := tls.X509KeyPair([]byte(s.Certificate), []byte(s.PrivateKey))
 	if err != nil {

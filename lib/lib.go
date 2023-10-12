@@ -9,17 +9,14 @@ import (
 
 func GetPrivateIPAddress() ([]string, error) {
 	// get list of available addresses
-
 	var ipAddresses []string
 	addr, err := net.InterfaceAddrs()
 	if err != nil {
 		return nil, err
 	}
-
 	for _, addr := range addr {
 		if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() && ipnet.IP.To4() != nil {
 			ipAddresses = append(ipAddresses, ipnet.IP.String())
-
 		}
 	}
 	return ipAddresses, nil
@@ -51,5 +48,4 @@ func HTTPClient() *http.Client {
 	// Create an HTTP client with the custom TLS configuration
 	client := &http.Client{}
 	return client
-
 }
