@@ -3,7 +3,6 @@ package lib
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"fmt"
 	"net"
 	"net/http"
 )
