@@ -87,7 +87,7 @@ func (s Server) getIdentity(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	}
-	fmt.Print(s)
+	
 	name := fmt.Sprintf(RESPONSE, s.Color, s.APIType)
 	service := lib.ServiceName{
 		Name:       &name,
@@ -116,7 +116,7 @@ func (s Server) invokeAPI(c *gin.Context, checkSelfSignedCA bool) {
 
 	var service lib.ExtrenalService
 	err = json.NewDecoder(c.Request.Body).Decode(&service)
-	fmt.Print(service)
+	
 	if err != nil {
 		
 		c.JSON(http.StatusInternalServerError, err)
