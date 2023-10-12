@@ -25,10 +25,7 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           version: v1.54
-      - uses: brian-pickens/go-test-report@v1
-        name: UNIT Test
+      - name: Coverage test
+        uses: joyarzun/go-testcoverage-action@v1
         with:
-          packages: "./..."
-          reports-only: "false"
-          summary: "true"
-          GO111MODULE: "auto"
+          coverage-threshold: 80
