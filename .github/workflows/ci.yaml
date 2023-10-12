@@ -25,7 +25,14 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           version: v1.54
-      - name: Coverage test
-        uses: joyarzun/go-testcoverage-action@v1
+      - name: generate test coverage
+        run: go test ./... -coverprofile=./cover.out
+
+      - name: check test coverage
+        uses: vladopajic/go-test-coverage@v2
         with:
-          coverage-threshold: 80
+          # Configure action using config file (option 1)
+          profile: cover.out
+          threshold-file: 80
+          threshold-package: 80
+          threshold-total: 95

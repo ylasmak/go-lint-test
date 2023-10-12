@@ -9,3 +9,5 @@ export PORT="8080"
 export SECURE="FALSE"
 
 go run main.go
+
+# go install golang.org/x/vuln/cmd/govulncheck@latest
