@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"context"
 	"crypto/tls"
 	"crypto/x509"
 	"net"
@@ -34,7 +35,6 @@ func HTTPSClient(cert string) *http.Client {
 
 	// Add the certificate pool to the TLS configuration
 	tlsConfig.RootCAs = certPool
-
 	// Create an HTTP client with the custom TLS configuration
 	client := &http.Client{
 		Transport: &http.Transport{
@@ -48,4 +48,8 @@ func HTTPClient() *http.Client {
 	// Create an HTTP client with the custom TLS configuration
 	client := &http.Client{}
 	return client
+}
+
+func GetRequestWithContext(url string) (*http.Request, error) {
+	return http.NewRequestWithContext(context.TODO(), http.MethodGet, url, nil)
 }

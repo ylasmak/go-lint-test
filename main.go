@@ -112,12 +112,18 @@ func (s Server) invokeAPI(c *gin.Context, checkSelfSignedCA bool) {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	var response *http.Response
-	if checkSelfSignedCA {
-		response, err = lib.HTTPSClient(s.CA).Get(*service.Url)
-	} else {
-		response, err = lib.HTTPClient().Get(*service.Url)
+
+	req, err := lib.GetRequestWithContext(*service.Url)
+	if err != nil {
+		return
 	}
+	var client *http.Client
+	if checkSelfSignedCA {
+		client = lib.HTTPSClient(s.CA)
+	} else {
+		client = lib.HTTPClient()
+	}
+	response, err := client.Do(req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
