@@ -4,10 +4,11 @@ import (
 	"crypto/tls"
 	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"strings"
-	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/proxy/lib"
 )
@@ -40,6 +41,7 @@ func main() {
 		s.startServer(router)
 	}
 }
+
 func (s Server) startTLSServer(router *gin.Engine) {
 	tlsCert, err := tls.X509KeyPair([]byte(s.Certificate), []byte(s.PrivateKey))
 	if err != nil {
@@ -72,16 +74,14 @@ func (s Server) startServer(router *gin.Engine) {
 	if err != nil {
 		panic(err)
 	}
-
 }
 
 func (s Server) getIdentity(c *gin.Context) {
 	ips, err := lib.GetPrivateIPAddress()
-	
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 	}
-	
+
 	name := fmt.Sprintf(RESPONSE, s.Color, s.APIType)
 	service := lib.ServiceName{
 		Name:       &name,
@@ -114,10 +114,10 @@ func (s Server) invokeAPI(c *gin.Context, checkSelfSignedCA bool) {
 	}
 	var response *http.Response
 	if checkSelfSignedCA {
-		response, err = lib.HTTPSClient(s.CA).Get(*service.Url)		
+		response, err = lib.HTTPSClient(s.CA).Get(*service.Url)
 	} else {
-		response, err = lib.HTTPClient().Get(*service.Url)	
-	}	
+		response, err = lib.HTTPClient().Get(*service.Url)
+	}
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
@@ -135,7 +135,6 @@ func (s Server) invokeAPI(c *gin.Context, checkSelfSignedCA bool) {
 		MyIP:                &ips,
 	}
 	c.JSON(http.StatusOK, postResponse)
-
 }
 
 func NewServer() Server {
@@ -176,5 +175,4 @@ func NewServer() Server {
 			Secure:  false,
 		}
 	}
-
 }
