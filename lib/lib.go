@@ -14,14 +14,11 @@ func GetPrivateIpAddress() ([]string, error) {
 	var ipAddresses []string
 	addr, err := net.InterfaceAddrs()
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 
 	for _, addr := range addr {
 		if ipnet, ok := addr.(*net.IPNet); ok && !ipnet.IP.IsLoopback() && ipnet.IP.To4() != nil {
-			// print available addresses
-			fmt.Println(ipnet.IP.String())
 			ipAddresses = append(ipAddresses, ipnet.IP.String())
 
 		}
