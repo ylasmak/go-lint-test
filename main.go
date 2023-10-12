@@ -28,9 +28,7 @@ type Server struct {
 }
 
 func main() {
-
 	s := NewServer()
-
 	router := gin.Default()
 	path := "/" + strings.ToLower(s.Color)
 	router.GET(path, s.getIdentity)
@@ -68,7 +66,6 @@ func (s Server) startTLSServer(router *gin.Engine) {
 }
 
 func (s Server) startServer(router *gin.Engine) {
-
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%s", s.Port),
 		Handler: router,
@@ -82,7 +79,7 @@ func (s Server) startServer(router *gin.Engine) {
 }
 
 func (s Server) getIdentity(c *gin.Context) {
-	ips, err := lib.GetPrivateIpAddress()
+	ips, err := lib.GetPrivateIPAddress()
 	
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
@@ -107,39 +104,31 @@ func (s Server) callAPI(c *gin.Context) {
 }
 
 func (s Server) invokeAPI(c *gin.Context, checkSelfSignedCA bool) {
-
-	ips, err := lib.GetPrivateIpAddress()
+	ips, err := lib.GetPrivateIPAddress()
 	if err != nil {
-		
 		c.JSON(http.StatusInternalServerError, err)
 	}
 
 	var service lib.ExtrenalService
 	err = json.NewDecoder(c.Request.Body).Decode(&service)
-	
 	if err != nil {
-		
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
 	var response *http.Response
 	if checkSelfSignedCA {
-		response, err = lib.HttpsClient(s.CA).Get(*service.Url)
+		response, err = lib.HTTPSClient(s.CA).Get(*service.Url)		
 	} else {
-		response, err = lib.HttpClient().Get(*service.Url)
-	}
-
+		response, err = lib.HTTPClient().Get(*service.Url)	
+	}	
 	if err != nil {
-		
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-
+	defer response.Body.Close()
 	var result interface{}
 	err = json.NewDecoder(response.Body).Decode(&result)
-	fmt.Print(result)
 	if err != nil {
-	
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
@@ -153,7 +142,6 @@ func (s Server) invokeAPI(c *gin.Context, checkSelfSignedCA bool) {
 }
 
 func NewServer() Server {
-
 	secure := os.Getenv("SECURE")
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
@@ -183,7 +171,6 @@ func NewServer() Server {
 			Port:        port,
 			Secure:      true,
 		}
-
 	} else {
 		return Server{
 			Color:   os.Getenv("COLOR"),

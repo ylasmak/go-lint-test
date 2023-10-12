@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func GetPrivateIpAddress() ([]string, error) {
+func GetPrivateIPAddress() ([]string, error) {
 	// get list of available addresses
 
 	var ipAddresses []string
@@ -25,7 +25,7 @@ func GetPrivateIpAddress() ([]string, error) {
 	return ipAddresses, nil
 }
 
-func HttpsClient(cert string) *http.Client {
+func HTTPSClient(cert string) *http.Client {
 	// Create a custom TLS configuration
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: false, // Ignore verification of the server's certificate
@@ -47,7 +47,7 @@ func HttpsClient(cert string) *http.Client {
 	return client
 }
 
-func HttpClient() *http.Client {
+func HTTPClient() *http.Client {
 	// Create an HTTP client with the custom TLS configuration
 	client := &http.Client{}
 	return client
