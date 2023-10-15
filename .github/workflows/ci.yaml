@@ -36,7 +36,7 @@ jobs:
           threshold-file: 80
           threshold-package: 80
           threshold-total: 95
-  tests:
+  golang-security-scan:
     runs-on: ubuntu-latest
     env:
       GO111MODULE: on
@@ -47,3 +47,9 @@ jobs:
         uses: securego/gosec@master
         with:
           args: ./...
+      - name: Install govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest
+        shell: bash
+      - name: Run govulncheck
+        run: govulncheck -C ${{ inputs.work-dir }} ${{ inputs.go-package }}
+        shell: bash

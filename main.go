@@ -16,9 +16,6 @@ import (
 
 //go:generate oapi-codegen --package=lib -generate=types -o ./lib/model.gen.go ./swagger.yaml
 
-const RESPONSE = "%s Service %s "
-const READ_HEADER_TIMEOUT = 30
-
 type Server struct {
 	Color       string
 	APIType     string
@@ -28,6 +25,11 @@ type Server struct {
 	Secure      bool
 	Port        string
 }
+
+const (
+	Response          = "%s Service %s "
+	RaedHeaderTimeout = 30
+)
 
 func main() {
 	s := NewServer()
@@ -59,7 +61,7 @@ func (s Server) startTLSServer(router *gin.Engine) {
 		Addr:              fmt.Sprintf(":%s", s.Port),
 		Handler:           router,
 		TLSConfig:         tlsConfig,
-		ReadHeaderTimeout: READ_HEADER_TIMEOUT * time.Second,
+		ReadHeaderTimeout: RaedHeaderTimeout * time.Second,
 	}
 
 	err = server.ListenAndServeTLS("", "")
@@ -72,7 +74,7 @@ func (s Server) startServer(router *gin.Engine) {
 	server := &http.Server{
 		Addr:              fmt.Sprintf(":%s", s.Port),
 		Handler:           router,
-		ReadHeaderTimeout: READ_HEADER_TIMEOUT * time.Second,
+		ReadHeaderTimeout: RaedHeaderTimeout * time.Second,
 	}
 
 	err := server.ListenAndServe()
@@ -87,7 +89,7 @@ func (s Server) getIdentity(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, err)
 	}
 
-	name := fmt.Sprintf(RESPONSE, s.Color, s.APIType)
+	name := fmt.Sprintf(Response, s.Color, s.APIType)
 	service := lib.ServiceName{
 		Name:       &name,
 		PrivateIp:  &ips,
