@@ -1,6 +1,7 @@
 package main
 
 import (
+	"time"
 	"crypto/tls"
 	"encoding/base64"
 	"encoding/json"
@@ -50,12 +51,14 @@ func (s Server) startTLSServer(router *gin.Engine) {
 
 	tlsConfig := &tls.Config{
 		Certificates: []tls.Certificate{tlsCert},
+		MinVersion: tls.VersionTLS12,
 	}
 
 	server := &http.Server{
 		Addr:      fmt.Sprintf(":%s", s.Port),
 		Handler:   router,
 		TLSConfig: tlsConfig,
+		ReadHeaderTimeout: 30 *time.Second,
 	}
 
 	err = server.ListenAndServeTLS("", "")
@@ -68,6 +71,7 @@ func (s Server) startServer(router *gin.Engine) {
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%s", s.Port),
 		Handler: router,
+		ReadHeaderTimeout: 30 *time.Second,
 	}
 
 	err := server.ListenAndServe()

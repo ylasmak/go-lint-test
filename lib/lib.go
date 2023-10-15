@@ -27,6 +27,7 @@ func HTTPSClient(cert string) *http.Client {
 	// Create a custom TLS configuration
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: false, // Ignore verification of the server's certificate
+		MinVersion: tls.VersionTLS12,
 	}
 
 	// Load the certificate and key into a certificate pool
