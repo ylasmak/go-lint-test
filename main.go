@@ -1,7 +1,6 @@
 package main
 
 import (
-	"time"
 	"crypto/tls"
 	"encoding/base64"
 	"encoding/json"
@@ -9,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/proxy/lib"
@@ -17,6 +17,7 @@ import (
 //go:generate oapi-codegen --package=lib -generate=types -o ./lib/model.gen.go ./swagger.yaml
 
 const RESPONSE = "%s Service %s "
+const READ_HEADER_TIMEOUT = 30
 
 type Server struct {
 	Color       string
@@ -51,14 +52,14 @@ func (s Server) startTLSServer(router *gin.Engine) {
 
 	tlsConfig := &tls.Config{
 		Certificates: []tls.Certificate{tlsCert},
-		MinVersion: tls.VersionTLS12,
+		MinVersion:   tls.VersionTLS12,
 	}
 
 	server := &http.Server{
-		Addr:      fmt.Sprintf(":%s", s.Port),
-		Handler:   router,
-		TLSConfig: tlsConfig,
-		ReadHeaderTimeout: 30 *time.Second,
+		Addr:              fmt.Sprintf(":%s", s.Port),
+		Handler:           router,
+		TLSConfig:         tlsConfig,
+		ReadHeaderTimeout: READ_HEADER_TIMEOUT * time.Second,
 	}
 
 	err = server.ListenAndServeTLS("", "")
@@ -69,9 +70,9 @@ func (s Server) startTLSServer(router *gin.Engine) {
 
 func (s Server) startServer(router *gin.Engine) {
 	server := &http.Server{
-		Addr:    fmt.Sprintf(":%s", s.Port),
-		Handler: router,
-		ReadHeaderTimeout: 30 *time.Second,
+		Addr:              fmt.Sprintf(":%s", s.Port),
+		Handler:           router,
+		ReadHeaderTimeout: READ_HEADER_TIMEOUT * time.Second,
 	}
 
 	err := server.ListenAndServe()

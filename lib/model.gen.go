@@ -11,7 +11,7 @@ type ExtrenalService struct {
 // Response defines model for Response.
 type Response struct {
 	ExternalServiceName interface{}
-	MyIP                *[]string  
+	MyIP                *[]string
 }
 
 // ServiceName defines model for ServiceName.
