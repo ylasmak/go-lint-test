@@ -36,3 +36,14 @@ jobs:
           threshold-file: 80
           threshold-package: 80
           threshold-total: 95
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+      - name: Run Gosec Security Scanner
+        uses: securego/gosec@master
+        with:
+          args: ./...
