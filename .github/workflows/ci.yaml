@@ -38,7 +38,6 @@ jobs:
       - name: display unit test error of it exist
         if: always()
         run: cat test.result
-
       - name: check test coverage
         uses: ./.github/actions/go-test-coverage
         with:
@@ -47,6 +46,9 @@ jobs:
           threshold-file: 80
           threshold-package: 80
           threshold-total: 95
+      - name: display test coverge result
+        if: always()
+        run: cat code_coverage.result
   # golang-security-scan:
   #   runs-on: ubuntu-latest
   #   env:

@@ -71,14 +71,17 @@ func (a *args) overrideConfig(cfg testcoverage.Config) testcoverage.Config {
 //nolint:forbidigo // relax
 func main() {
 	cfg, err := readConfig()
-	var b bytes.Buffer
-	output := bufio.NewWriter(&b)
+
+	resultFile, err := os.Create("/github/workspace/code_coverage.result")
+	defer resultFile.Close()
+	// var b bytes.Buffer
+	// output := bufio.NewWriter(&b)
 
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
-	writer := io.MultiWriter(output, os.Stdout)
+	writer := io.MultiWriter(resultFile, os.Stdout)
 	// result, err := testcoverage.Check(os.Stdout, cfg)
 	result, err := testcoverage.Check(writer, cfg)
 
