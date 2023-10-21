@@ -6,7 +6,10 @@ import (
 
 	"github.com/alexflint/go-arg"
 
+	"bufio"
+	"bytes"
 	"github.com/vladopajic/go-test-coverage/v2/pkg/testcoverage"
+	"io"
 )
 
 const Version = "v2.7.1"
@@ -68,12 +71,17 @@ func (a *args) overrideConfig(cfg testcoverage.Config) testcoverage.Config {
 //nolint:forbidigo // relax
 func main() {
 	cfg, err := readConfig()
+	var b bytes.Buffer
+	output := bufio.NewWriter(&b)
+
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
+	writer := io.MultiWriter(output, os.Stdout)
+	// result, err := testcoverage.Check(os.Stdout, cfg)
+	result, err := testcoverage.Check(writer, cfg)
 
-	result, err := testcoverage.Check(os.Stdout, cfg)
 	if err != nil || !result.Pass() {
 		if err != nil {
 			fmt.Println(err.Error())
@@ -81,6 +89,7 @@ func main() {
 
 		os.Exit(1)
 	}
+
 }
 
 func readConfig() (testcoverage.Config, error) {
