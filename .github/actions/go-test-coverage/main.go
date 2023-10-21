@@ -6,8 +6,6 @@ import (
 
 	"github.com/alexflint/go-arg"
 
-	"bufio"
-	"bytes"
 	"github.com/vladopajic/go-test-coverage/v2/pkg/testcoverage"
 	"io"
 )
