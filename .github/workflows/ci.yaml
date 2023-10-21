@@ -26,7 +26,7 @@ jobs:
       #   with:
       #     version: v1.54
       - name: generate test coverage
-        run: go test ./... -coverprofile=./cover.out 
+        run: go test ./... -coverprofile=./cover.out > test.result
 
       # - name: check test coverage
       #   uses: vladopajic/go-test-coverage@v2
