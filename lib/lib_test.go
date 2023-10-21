@@ -9,7 +9,7 @@ func TestGetPrivateIPAddress(t *testing.T) {
 	if err != nil {
 		t.Fail()
 	}
-	if len(addrs) > 0 {
+	if len(addrs) <= 0 {
 		t.Error("Error")
 	}
 }
