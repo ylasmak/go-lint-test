@@ -26,16 +26,18 @@ jobs:
       #   with:
       #     version: v1.54
       - name: generate test coverage
-        run: go test ./... -coverprofile=./cover.out > test.result
+        run: | 
+                go test -v ./... -coverprofile=./cover.out > test.result
+                cat test.result
 
-      # - name: check test coverage
-      #   uses: vladopajic/go-test-coverage@v2
-      #   with:
-      #     # Configure action using config file (option 1)
-      #     profile: cover.out
-      #     threshold-file: 80
-      #     threshold-package: 80
-      #     threshold-total: 95
+      - name: check test coverage
+        uses: vladopajic/go-test-coverage@v2
+        with:
+          # Configure action using config file (option 1)
+          profile: cover.out
+          threshold-file: 80
+          threshold-package: 80
+          threshold-total: 95
   # golang-security-scan:
   #   runs-on: ubuntu-latest
   #   env:
@@ -56,5 +58,4 @@ jobs:
   #       run: go install golang.org/x/vuln/cmd/govulncheck@latest
   #     - name: Run govulncheck
   #       run: |
-  #           ls
   #           govulncheck ./...
