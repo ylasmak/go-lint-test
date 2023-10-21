@@ -25,6 +25,12 @@ jobs:
       #   uses: golangci/golangci-lint-action@v3
       #   with:
       #     version: v1.54
+      - name: install go dependecies
+        run: | 
+              go get .
+              go mod tidy
+              go version
+                
       - name: generate test coverage
         run: | 
                 go test -v ./... -coverprofile=./cover.out > test.result
