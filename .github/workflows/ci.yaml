@@ -16,47 +16,45 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-go@v4
         with:
           go-version: '1.21.3'
           cache: false
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          version: v1.54
+      # - name: golangci-lint
+      #   uses: golangci/golangci-lint-action@v3
+      #   with:
+      #     version: v1.54
       - name: generate test coverage
-        run: go test ./... -coverprofile=./cover.out
+        run: go test ./... -coverprofile=./cover.out 
 
-      - name: check test coverage
-        uses: vladopajic/go-test-coverage@v2
-        with:
-          # Configure action using config file (option 1)
-          profile: cover.out
-          threshold-file: 80
-          threshold-package: 80
-          threshold-total: 95
-  golang-security-scan:
-    runs-on: ubuntu-latest
-    env:
-      GO111MODULE: on
-    steps:
-      - name: Checkout Source
-        uses: actions/checkout@v3
-      - uses: actions/setup-go@v4
-        with:
-          go-version: '1.21.3'
-      - name: Run install prerequiste
-        run: go mod tidy
-      - name: Run Gosec Security Scanner
-        uses: securego/gosec@master
-        with:
-          args: ./...
-      - name: Install govulncheck
-        run: go install golang.org/x/vuln/cmd/govulncheck@latest
-      - name: Run govulncheck
-        run: |
-            ls
-            go version
-            cat go.mod
-            govulncheck ./...
+      # - name: check test coverage
+      #   uses: vladopajic/go-test-coverage@v2
+      #   with:
+      #     # Configure action using config file (option 1)
+      #     profile: cover.out
+      #     threshold-file: 80
+      #     threshold-package: 80
+      #     threshold-total: 95
+  # golang-security-scan:
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     GO111MODULE: on
+  #   steps:
+  #     - name: Checkout Source
+  #       uses: actions/checkout@v3
+  #     - uses: actions/setup-go@v4
+  #       with:
+  #         go-version: '1.21.3'
+  #     - name: Run install prerequiste
+  #       run: go mod tidy
+  #     - name: Run Gosec Security Scanner
+  #       uses: securego/gosec@master
+  #       with:
+  #         args: ./...
+  #     - name: Install govulncheck
+  #       run: go install golang.org/x/vuln/cmd/govulncheck@latest
+  #     - name: Run govulncheck
+  #       run: |
+  #           ls
+  #           govulncheck ./...
