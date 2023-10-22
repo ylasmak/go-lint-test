@@ -47,10 +47,16 @@ jobs:
             cat code_coverage.result >> unitTestExecutionAndTestcoverage.result
             cat unitTestExecutionAndTestcoverage.result
             echo 'unitTestResultFile=unitTestExecutionAndTestcoverage.result' >> "$GITHUB_OUTPUT"
+      - name: Upload Test result as artifact
+        if:   steps.dipalayTestResult.outcome  == 'success'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.dipalayTestResult.outputs.unitTestResultFile }}
+          path: ${{ steps.dipalayTestResult.outputs.unitTestResultFile }}
   codeVulnerabiltyScan:
     runs-on: ubuntu-latest
     outputs:
-      jobResultFileName: ${{ steps.displaySecurityScanResult.outputs.securityScanResult }}
+      jobResultFileName: ${{ steps.displaySecurityScanResult.outputs.securityScanResultFile }}
     env:
       GO111MODULE: on
     steps:
@@ -75,19 +81,19 @@ jobs:
         if: always()
         id: displaySecurityScanResult
         run: |
-            echo 'securityScanResult=securityScanResult.result' >> "$GITHUB_OUTPUT"
+            echo 'securityScanResultFile=securityScanResult.result' >> "$GITHUB_OUTPUT"
             cat  securityScanResult.result
       - name: Upload Test result as artifact
         if:   steps.displaySecurityScanResult.outcome  == 'success'
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ steps.displaySecurityScanResult.outputs.securityScanResult }}
-          path: ${{ steps.displaySecurityScanResult.outputs.securityScanResult }}
+          name: ${{ steps.displaySecurityScanResult.outputs.securityScanResultFile }}
+          path: ${{ steps.displaySecurityScanResult.outputs.securityScanResultFile }}
   codeQualityScan:
     name: Code Linting scan
     runs-on: ubuntu-latest
     outputs:
-      jobResultFileName: ${{ steps.displayCodeQualityScanResult.outputs.securityScanResult }}
+      jobResultFileName: ${{ steps.displayCodeQualityScanResult.outputs.codeQuqlityScanResultFile }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v4
@@ -103,5 +109,11 @@ jobs:
         if: always() 
         id: displayCodeQualityScanResult
         run: |
-            echo 'unitTestResultFile=codeQualityScan.result' >> "$GITHUB_OUTPUT"
+            echo 'codeQuqlityScanResultFile=codeQualityScan.result' >> "$GITHUB_OUTPUT"
             cat golangci-lint.result
+      - name: Upload Test result as artifact
+        if:   steps.displayCodeQualityScanResult.outcome  == 'success'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.displayCodeQualityScanResult.outputs.codeQuqlityScanResultFile }}
+          path: ${{ steps.displayCodeQualityScanResult.outputs.codeQuqlityScanResultFile }}
