@@ -2,14 +2,12 @@ name: code integration
 on:
   push:
     branches:
-      - master
       - main
   pull_request:
 
 permissions:
   contents: read
-  # Optional: allow read access to pull request. Use with `only-new-issues` option.
-  # pull-requests: read
+  pull-requests: write
 
 jobs:
   unitTestExecutionAndTestcoverage:
@@ -36,9 +34,9 @@ jobs:
         with:
           # Configure action using config file (option 1)
           profile: cover.out
-          threshold-file: 0
-          threshold-package: 0
-          threshold-total: 0
+          threshold-file: 80
+          threshold-package: 80
+          threshold-total: 80
       - name: display test result
         id: dipalayTestResult
         if: always()
@@ -48,7 +46,7 @@ jobs:
             cat unitTestExecutionAndTestcoverage.result
             echo 'unitTestResultFile=unitTestExecutionAndTestcoverage.result' >> "$GITHUB_OUTPUT"
       - name: Upload Test result as artifact
-        if:   steps.dipalayTestResult.outcome  == 'success'
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.dipalayTestResult.outputs.unitTestResultFile }}
@@ -84,7 +82,7 @@ jobs:
             echo 'securityScanResultFile=securityScanResult.result' >> "$GITHUB_OUTPUT"
             cat  securityScanResult.result
       - name: Upload Test result as artifact
-        if:   steps.displaySecurityScanResult.outcome  == 'success'
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.displaySecurityScanResult.outputs.securityScanResultFile }}
@@ -112,7 +110,7 @@ jobs:
             echo 'codeQuqlityScanResultFile=codeQualityScan.result' >> "$GITHUB_OUTPUT"
             cat golangci-lint.result
       - name: Upload Test result as artifact
-        if:   steps.displayCodeQualityScanResult.outcome  == 'success'
+        if:   always()
         uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.displayCodeQualityScanResult.outputs.codeQuqlityScanResultFile }}
