@@ -31,6 +31,8 @@ const (
 	RaedHeaderTimeout = 30
 )
 
+var cpt int32 = 34
+
 func main() {
 	s := NewServer()
 	router := gin.Default()
