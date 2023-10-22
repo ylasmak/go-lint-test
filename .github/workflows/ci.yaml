@@ -76,7 +76,13 @@ jobs:
           go-version: '1.21.3'
           check-latest: true
           cache: false
-      - name: golangci-lint
-        uses: golangci/golangci-lint-action@v3
-        with:
-          version: v1.54
+      - name: install golangci-lint
+        run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.55.0
+      - name: run golangci-lint
+        run: golangci-lint run ./...  > golangci-lint.result
+      - name: Display lint result
+        run: cat golangci-lint.result
+      # - name: golangci-lint
+      #   uses: golangci/golangci-lint-action@v3
+      #   with:
+      #     version: v1.55
