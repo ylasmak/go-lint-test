@@ -12,60 +12,60 @@ permissions:
   # pull-requests: read
 
 jobs:
-  # UnitTestExecutionAndTestcoverage:
-  #   name: Unit test execution and test coverage
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-go@v4
-  #       with:
-  #         go-version: '1.21.3'
-  #         check-latest: true
-  #         cache: false
-  #     - name: install go dependecies
-  #       run: | 
-  #             go get .
-  #             go mod tidy
-  #     - name: generate test coverage
-  #       run: | 
-  #             go test -v ./... -coverprofile=./cover.out > test.result
-  #     - name: check test coverage
-  #       uses: ylasmak/go-coverage-test@main
-  #       with:
-  #         # Configure action using config file (option 1)
-  #         profile: cover.out
-  #         threshold-file: 80
-  #         threshold-package: 80
-  #         threshold-total: 95
-  #     - name: display test result
-  #       if: always()
-  #       run: |
-  #           cat test.result
-  #           cat code_coverage.result
-  # VulnerabiltyScan:
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     GO111MODULE: on
-  #   steps:
-  #     - name: Checkout Source
-  #       uses: actions/checkout@v4
-  #     - uses: actions/setup-go@v4
-  #       with:
-  #         go-version: '1.21.3'
-  #     - name: Run install prerequiste
-  #       run: |
-  #           go get .
-  #           go mod tidy
-  #     - name: Install govulncheck
-  #       run: |
-  #           go install github.com/securego/gosec/v2/cmd/gosec@latest
-  #           go install golang.org/x/vuln/cmd/govulncheck@latest
-  #     - name: Run govulncheck
-  #       run: |
-  #           govulncheck ./... > security-test.result
-  #           gosec ./...      >> security-test.result
-  #     - name: Display security test result
-  #       run: cat  security-test.result
+  unitTestExecutionAndTestcoverage:
+    name: Unit test execution and test coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21.3'
+          check-latest: true
+          cache: false
+      - name: install go dependecies
+        run: | 
+              go get .
+              go mod tidy
+      - name: generate test coverage
+        run: | 
+              go test -v ./... -coverprofile=./cover.out > test.result
+      - name: check test coverage
+        uses: ylasmak/go-coverage-test@main
+        with:
+          # Configure action using config file (option 1)
+          profile: cover.out
+          threshold-file: 80
+          threshold-package: 80
+          threshold-total: 95
+      - name: display test result
+        if: always()
+        run: |
+            cat test.result
+            cat code_coverage.result
+  codeVulnerabiltyScan:
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: on
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.21.3'
+      - name: Run install prerequiste
+        run: |
+            go get .
+            go mod tidy
+      - name: Install govulncheck
+        run: |
+            go install github.com/securego/gosec/v2/cmd/gosec@latest
+            go install golang.org/x/vuln/cmd/govulncheck@latest
+      - name: Run govulncheck
+        run: |
+            govulncheck ./... > security-test.result
+            gosec ./...      >> security-test.result
+      - name: Display security test result
+        run: cat  security-test.result
   CodeQualityScan:
     name: Code Linting scan
     runs-on: ubuntu-latest
@@ -83,7 +83,3 @@ jobs:
       - name: Display lint result
         if: always() 
         run: cat golangci-lint.result
-      # - name: golangci-lint
-      #   uses: golangci/golangci-lint-action@v3
-      #   with:
-      #     version: v1.55
