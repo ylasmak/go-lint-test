@@ -15,6 +15,8 @@ jobs:
   unitTestExecutionAndTestcoverage:
     name: Unit test execution and test coverage
     runs-on: ubuntu-latest
+    outputs:
+      jobResultFileName: ${{ steps.dipalayTestResult.outputs.unitTestResultFile }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v4
@@ -38,12 +40,17 @@ jobs:
           threshold-package: 80
           threshold-total: 95
       - name: display test result
+        id: dipalayTestResult
         if: always()
         run: |
-            cat test.result
-            cat code_coverage.result
+            cat test.result > unitTestExecutionAndTestcoverage.result
+            cat code_coverage.result >> unitTestExecutionAndTestcoverage.result
+            cat unitTestExecutionAndTestcoverage.result
+            echo 'unitTestResultFile = unitTestExecutionAndTestcoverage.result' >> "$GITHUB-OUTPUT"
   codeVulnerabiltyScan:
     runs-on: ubuntu-latest
+    outputs:
+      jobResultFileName: ${{ steps.displaySecurityScanResult.outputs.securityScanResult }}
     env:
       GO111MODULE: on
     steps:
@@ -62,13 +69,19 @@ jobs:
             go install golang.org/x/vuln/cmd/govulncheck@latest
       - name: Run govulncheck
         run: |
-            govulncheck ./... > security-test.result
-            gosec ./...      >> security-test.result
+            govulncheck ./... > securityScanResult.result
+            gosec ./...      >> securityScanResult.result
       - name: Display security test result
-        run: cat  security-test.result
-  CodeQualityScan:
+        if: always()
+        id: displaySecurityScanResult
+        run: |
+            echo 'securityScanResultFile = securityScanResult.result' >> "$GITHUB-OUTPUT"
+            cat  security-test.result
+  codeQualityScan:
     name: Code Linting scan
     runs-on: ubuntu-latest
+    outputs:
+      jobResultFileName: ${{ steps.displayCodeQualityScanResult.outputs.securityScanResult }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v4
@@ -82,4 +95,7 @@ jobs:
         run: golangci-lint run ./...  > golangci-lint.result
       - name: Display lint result
         if: always() 
-        run: cat golangci-lint.result
+        id: displayCodeQualityScanResult
+        run: |
+            echo 'unitTestResultFile = codeQualityScan.result' >> "$GITHUB-OUTPUT"
+            cat golangci-lint.result
