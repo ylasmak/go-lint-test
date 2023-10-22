@@ -75,7 +75,7 @@ jobs:
         if: always()
         id: displaySecurityScanResult
         run: |
-            echo 'securityScanResultFile = securityScanResult.result' >> "$GITHUB-OUTPUT"
+            echo 'securityScanResult = securityScanResult.result' >> "$GITHUB-OUTPUT"
             cat  securityScanResult.result
       - name: Upload Test result as artifact
         if:   steps.displaySecurityScanResult.outcome  == 'success'
