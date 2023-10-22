@@ -46,7 +46,7 @@ jobs:
             cat test.result > unitTestExecutionAndTestcoverage.result
             cat code_coverage.result >> unitTestExecutionAndTestcoverage.result
             cat unitTestExecutionAndTestcoverage.result
-            echo 'unitTestResultFile = unitTestExecutionAndTestcoverage.result' >> "$GITHUB-OUTPUT"
+            echo 'unitTestResultFile=unitTestExecutionAndTestcoverage.result' >> "$GITHUB_OUTPUT"
   codeVulnerabiltyScan:
     runs-on: ubuntu-latest
     outputs:
@@ -75,7 +75,7 @@ jobs:
         if: always()
         id: displaySecurityScanResult
         run: |
-            echo 'securityScanResult = securityScanResult.result' >> "$GITHUB-OUTPUT"
+            echo 'securityScanResult=securityScanResult.result' >> "$GITHUB_OUTPUT"
             cat  securityScanResult.result
       - name: Upload Test result as artifact
         if:   steps.displaySecurityScanResult.outcome  == 'success'
@@ -103,5 +103,5 @@ jobs:
         if: always() 
         id: displayCodeQualityScanResult
         run: |
-            echo 'unitTestResultFile = codeQualityScan.result' >> "$GITHUB-OUTPUT"
+            echo 'unitTestResultFile=codeQualityScan.result' >> "$GITHUB_OUTPUT"
             cat golangci-lint.result
