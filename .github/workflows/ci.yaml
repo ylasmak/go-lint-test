@@ -76,7 +76,13 @@ jobs:
         id: displaySecurityScanResult
         run: |
             echo 'securityScanResultFile = securityScanResult.result' >> "$GITHUB-OUTPUT"
-            cat  security-test.result
+            cat  securityScanResult.result
+      - name: Upload Test result as artifact
+        if:   steps.displaySecurityScanResult.outcome  == 'success'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.displaySecurityScanResult.outputs.securityScanResult }}
+          path: ${{ steps.displaySecurityScanResult.outputs.securityScanResult }}
   codeQualityScan:
     name: Code Linting scan
     runs-on: ubuntu-latest
