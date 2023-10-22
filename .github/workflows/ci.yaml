@@ -67,7 +67,7 @@ jobs:
   #     - name: Display security test result
   #       run: cat  security-test.result
   CodeQualityScan:
-    name: Unit test execution and test coverage
+    name: Code Linting scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -81,6 +81,7 @@ jobs:
       - name: run golangci-lint
         run: golangci-lint run ./...  > golangci-lint.result
       - name: Display lint result
+        if: always() 
         run: cat golangci-lint.result
       # - name: golangci-lint
       #   uses: golangci/golangci-lint-action@v3
