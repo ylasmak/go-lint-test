@@ -81,7 +81,7 @@ jobs:
     name: Code Linting scan
     runs-on: ubuntu-latest
     outputs:
-      jobResultFileName: ${{ steps.displayCodeQualityScanResult.outputs.securityScanResult }
+      jobResultFileName: ${{ steps.displayCodeQualityScanResult.outputs.securityScanResult }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v4
