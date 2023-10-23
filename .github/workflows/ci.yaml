@@ -134,4 +134,6 @@ jobs:
       - name: Display structure of downloaded files
         run: |
           ls -l
+          echo "------"
+          ls -R
         working-directory: test-result
