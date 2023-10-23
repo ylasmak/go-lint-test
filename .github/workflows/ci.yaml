@@ -56,7 +56,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ steps.dipalayTestResult.outputs.unitTestResultFile }}
+          name: test-result
           path: ${{ steps.dipalayTestResult.outputs.unitTestResultFile }}
   codeVulnerabiltyScan:
     runs-on: ubuntu-latest
@@ -92,7 +92,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ steps.displaySecurityScanResult.outputs.securityScanResultFile }}
+          name: test-result
           path: ${{ steps.displaySecurityScanResult.outputs.securityScanResultFile }}
   codeQualityScan:
     name: Code Linting scan
@@ -120,7 +120,7 @@ jobs:
         if:   always()
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ steps.displayCodeQualityScanResult.outputs.codeQuqlityScanResultFile }}
+          name: test-result
           path: ${{ steps.displayCodeQualityScanResult.outputs.codeQuqlityScanResultFile }}
   updatePullRequestWithComments:
     name: Update Pull Request With comment
