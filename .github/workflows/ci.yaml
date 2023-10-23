@@ -122,3 +122,14 @@ jobs:
         with:
           name: ${{ steps.displayCodeQualityScanResult.outputs.codeQuqlityScanResultFile }}
           path: ${{ steps.displayCodeQualityScanResult.outputs.codeQuqlityScanResultFile }}
+  updatePullRequestWithComments:
+    name: Update Pull Request With comment
+    runs-on: ubuntu-latest
+    needs: [ unitTestExecutionAndTestcoverage, codeVulnerabiltyScan, codeQualityScan]
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          path: path/to/artifacts
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: path/to/artifacts
