@@ -126,7 +126,7 @@ jobs:
     name: Update Pull Request With comment
     runs-on: ubuntu-latest
     needs: [ unitTestExecutionAndTestcoverage, codeVulnerabiltyScan, codeQualityScan]
-    if: always()
+    if: github.event_name == 'pull_request' && always()
     steps:
       - uses: actions/download-artifact@v3
         with:
@@ -136,4 +136,4 @@ jobs:
           ls -l
           echo "------"
           ls -R
-        working-directory: test-result
+        working-directory: test-result/test-result
