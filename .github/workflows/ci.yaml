@@ -4,6 +4,13 @@ on:
     branches:
       - main
   pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+    branches:
+      - 'feature/**'
+      - 'bug/**'
 
 permissions:
   contents: read
@@ -102,13 +109,13 @@ jobs:
       - name: install golangci-lint
         run: go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.55.0
       - name: run golangci-lint
-        run: golangci-lint run ./...  > golangci-lint.result
+        run: golangci-lint run ./...  > codeQualityScan.result
       - name: Display lint result
         if: always() 
         id: displayCodeQualityScanResult
         run: |
             echo 'codeQuqlityScanResultFile=codeQualityScan.result' >> "$GITHUB_OUTPUT"
-            cat golangci-lint.result
+            cat codeQualityScan.result
       - name: Upload Test result as artifact
         if:   always()
         uses: actions/upload-artifact@v3
