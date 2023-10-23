@@ -136,4 +136,5 @@ jobs:
           ls -l
           echo "------"
           ls -R
+         # gh pr comment 13 --body "Hi from GitHub CLI"
         working-directory: test-result/test-result
